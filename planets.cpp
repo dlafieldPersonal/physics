@@ -1,10 +1,3 @@
-/**
- * Walter Douglas Lafield
- * CSC 7443
- * Homework 1
- * Question 2
- * */
-
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <iostream>
