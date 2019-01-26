@@ -1,3 +1,4 @@
+/* testing git */
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <iostream>
@@ -35,7 +36,7 @@ int main(int argc, char** argv)
 {
 	glutInit (&argc, argv);
 	glutInitDisplayMode (GLUT_RGB);
-	glutInitWindowSize (1000, 1000);
+	glutInitWindowSize (500, 500);
 	glutInitWindowPosition (000, 000);
 	glutCreateWindow ("Change colors by pressing c, s, and t.");
 	glutDisplayFunc (display);
@@ -101,58 +102,36 @@ void display()
 { 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	/* set color white for lines */ 
-	glColor3f(1.0, 1.0, 1.0);   
-	glBegin(GL_LINES);
-		glVertex3f(0.0, 1.0, 0.0);
-		glVertex3f(0.0, -1.0, 0.0);
-		glVertex3f(-1.0, 0.0, 0.0);
-		glVertex3f(1.0, 0.0, 0.0);
-		glVertex3f(-1.0, -1.0, 0.0);
-		glVertex3f(1.0, 1.0, 0.0);
-		glVertex3f(-1.0, 1.0, 0.0);
-		glVertex3f(1.0, -1.0, 0.0);
+	/* set color to square color */ 
+	glColor3f(rs, gs, bs);   
+	glBegin(GL_POLYGON);
+		glVertex3f(-0.90, -0.20 - supBottom, 0.0);
+		glVertex3f(-0.50, -0.20 - supBottom, 0.0);
+		glVertex3f(-0.50, 0.20 + supTop, 0.0);
+		glVertex3f(-0.90, 0.20 + supTop, 0.0);
 	glEnd();  
-	GLfloat step = 0.1;
-	/* set color white for lines */
-	glColor3f(1.0, 1.0, 1.0);   
-	glBegin(GL_LINES);
 		
-		for(GLfloat i = 0.0; i <= 1.0; i += step)
-		{
-			glVertex3f(i, i, 0.0);
-			glVertex3f(i - 1.0, 1.0 - i, 0.0);
-			cout << "(" << i << ", " << i << ") (" << i - 1.0 << ", " << 1.0 - i << ")" << endl;
-		}
-	glEnd();  
+	/* set color to circle color */
+	glColor3f(rc, gc, bc);  
 	
-	if(false)
-	{
-		/* set color white for lines */
-		glColor3f(1.0, 1.0, 1.0);   
-		glBegin(GL_LINES);
-			
-			for(GLfloat i = 0.0; i <= 1.01; i += step)
-			{
-				glVertex3f(i, 0.0, 0.0);
-				glVertex3f(0.0, 1.0 - i, 0.0);
-			}
-		glEnd();  
-	}
-
-	/* set color yellow for step points */
-	GLfloat offset = 0.01;
-	glColor3f(1.0, 1.0, 0.0);   
+	GLfloat step = 0.001;  
 	glBegin(GL_POINTS);
-		/* x axis */
-		for(GLfloat y = -1.0; y <= 1.0; y += 0.1)
-			glVertex3f(offset, y, 0.0);
-			
-		/* y axis */
-		for(GLfloat x = -1.0; x <= 1.0; x += 0.1)
-			glVertex3f(x, offset, 0.0);
-	glEnd();  
+
+		/* draw ellipse */
+		for(GLfloat x = -0.25; x <= 0.25; x += step)
+			for(GLfloat y = -0.25 - supBottom; y <= 0.25 + supTop; y += step)
+				if(x * x / 0.0625 + y * y / (0.0625 + 0.5 * supTop + supTop * supTop) < 1)
+					glVertex2f(x, y);
+	glEnd();
 	
+	/* set color to triangle color */
+	glColor3f(rt, gt, bt); 
+	glBegin(GL_POLYGON);
+		glVertex3f(0.33, -0.25 - supBottom, 0.0);
+		glVertex3f(0.83, -0.25 - supBottom, 0.0);
+		glVertex3f(0.83, 0.25 + supTop, 0.0);
+	glEnd();   
+
 	glFlush();
 } /* display */
     
