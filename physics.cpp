@@ -57,7 +57,6 @@ int main(int argc, char** argv)
 	glutInitWindowPosition (000, 000);
 	glutCreateWindow ("Change colors by pressing c, s, and t.");
 	glutDisplayFunc (display);
-	glutReshapeFunc (reshape);
 	glutKeyboardFunc (keyboard);
 	glutMainLoop();
 
@@ -69,47 +68,6 @@ int main(int argc, char** argv)
 
 void keyboard (unsigned char key, int x, int y)
 {
-	//cout << "key: [" << key << "]" << endl;
-	switch (key) 
-	{
-		case 't':
-			d = 't';
-			adjustColor(rt, gt, bt);
-			glutPostRedisplay ();
-			break;
-		case 'c':
-			d = 'c';
-			adjustColor(rc, gc, bc);
-			glutPostRedisplay ();
-			break;
-		case 's':
-			d = 's';
-			adjustColor(rs, gs, bs);
-			glutPostRedisplay();
-			break;
-		case '+': 
-			d = '+';
-			/* grow */
-			if(supTop < 0.25)
-			{
-				supTop += 0.05;
-				supBottom += 0.05;
-			}
-			glutPostRedisplay();
-			break;
-		case '-':
-			d = '-';
-			/* shrink */
-			if(supTop > -0.15)
-			{
-				supTop -= 0.05;
-				supBottom -= 0.05;
-			}
-			glutPostRedisplay();
-			break;
-		default:
-			break;
-	} /* switch */
 	
 } /* keyboard */
 
@@ -152,37 +110,7 @@ void display()
 } /* display */
     
 /***************************************************/
-
-void reshape(int w, int h)
-{
-	glViewport (0, 0, (GLsizei) w, (GLsizei) h);
-} /* reshape */
-
 /***************************************************/
-
-void adjustColor(GLfloat &r, GLfloat &g, GLfloat &b)
-{
-	/**
-	 * flip blue
-	 * if blue flips to 0, flip green
-	 * if green flips to 0, flip red
-	 * */
-	 
-	if(b == 0.0)
-		b = 1.0;
-	else
-	{
-		b = 0.0;
-		if(g == 0.0)
-			g = 1.0;
-		else
-		{
-			g = 0.0;
-			r = 1.0 - r;
-		}
-	}
-} /* adjustColor */
-
 /***************************************************/
 /***************************************************/
 /***************************************************/

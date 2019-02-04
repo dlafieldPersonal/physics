@@ -12,7 +12,10 @@ class Pobj
 	private:
 		GLfloat xCoord;
 		GLfloat yCoord;
-		GLfloat radius;
+		GLfloat area;
+		double mass;
+		GLfloat xVel;
+		GLfloat yVel;
 	public:
 		/* constructer */
 		Pobj(GLfloat x, GLfloat y);
@@ -22,8 +25,11 @@ class Pobj
 		~Pobj();
 
 		/* get functions */
+		double getMass() const;
 		GLfloat getXCoord() const;
 		GLfloat getYCoord() const;
+		GLfloat getXVel() const;
+		GLfloat getYVel() const;
 		
 		/* set functions */
 		void setXCoord(GLfloat x);
