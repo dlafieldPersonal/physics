@@ -2,6 +2,10 @@
 #include <GL/glut.h>
 #include <stdlib.h>
 #include <iostream>
+#include <random>
+#include "Pobj.h"
+
+#define NUM_OF_FLOATS 5
 
 using namespace std;
 
@@ -22,6 +26,12 @@ GLfloat rc = 0.0, gc = 0.0, bc = 1.0;
 /* top and bottom suppliments */
 GLfloat supTop = 0.0, supBottom = 0.0;
 
+/* boundry variables */
+GLfloat bTop = -0.9, bBottom = 0.9, bLeft = -0.9, bRight = 0.9, bThickness = 0.01;
+
+/* floating objects */
+Pobj listOfFloats[NUM_OF_FLOATS];
+
 /***************************************************/
 
 /* prototypes */
@@ -34,9 +44,16 @@ void reshape(int w, int h);
 
 int main(int argc, char** argv)
 {
+	random_device rd;
+	mt19937 e2(rd());
+	uniform_real_distribution<> dist(-0.9, 0.9);
+	
+	for(int i = 0; i < NUM_OF_FLOATS; i++)
+		listOfFloats[i] = Pobj(dist(e2), dist(e2));
+
 	glutInit (&argc, argv);
 	glutInitDisplayMode (GLUT_RGB);
-	glutInitWindowSize (500, 500);
+	glutInitWindowSize (900, 500);
 	glutInitWindowPosition (000, 000);
 	glutCreateWindow ("Change colors by pressing c, s, and t.");
 	glutDisplayFunc (display);
@@ -102,36 +119,35 @@ void display()
 { 
 	glClear(GL_COLOR_BUFFER_BIT);
 	
-	/* set color to square color */ 
-	glColor3f(rs, gs, bs);   
+	/* draw boundries */
+	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON);
-		glVertex3f(-0.90, -0.20 - supBottom, 0.0);
-		glVertex3f(-0.50, -0.20 - supBottom, 0.0);
-		glVertex3f(-0.50, 0.20 + supTop, 0.0);
-		glVertex3f(-0.90, 0.20 + supTop, 0.0);
+		glVertex3f(bTop, bLeft, 0.0);
+		glVertex3f(bTop, bRight, 0.0);
+		glVertex3f(bBottom, bRight, 0.0);
+		glVertex3f(bBottom, bLeft, 0.0);
 	glEnd();  
-		
-	/* set color to circle color */
-	glColor3f(rc, gc, bc);  
 	
-	GLfloat step = 0.001;  
-	glBegin(GL_POINTS);
-
-		/* draw ellipse */
-		for(GLfloat x = -0.25; x <= 0.25; x += step)
-			for(GLfloat y = -0.25 - supBottom; y <= 0.25 + supTop; y += step)
-				if(x * x / 0.0625 + y * y / (0.0625 + 0.5 * supTop + supTop * supTop) < 1)
-					glVertex2f(x, y);
-	glEnd();
-	
-	/* set color to triangle color */
-	glColor3f(rt, gt, bt); 
+	glColor3f(0.0, 0.0, 0.0);
 	glBegin(GL_POLYGON);
-		glVertex3f(0.33, -0.25 - supBottom, 0.0);
-		glVertex3f(0.83, -0.25 - supBottom, 0.0);
-		glVertex3f(0.83, 0.25 + supTop, 0.0);
-	glEnd();   
-
+		glVertex3f(bTop + bThickness, bLeft + bThickness, 0.0);
+		glVertex3f(bTop + bThickness, bRight - bThickness, 0.0);
+		glVertex3f(bBottom - bThickness, bRight - bThickness, 0.0);
+		glVertex3f(bBottom - bThickness, bLeft + bThickness, 0.0);
+	glEnd();  
+	
+	/* draw floaties */
+	glColor3f(1.0, 1.0, 1.0);
+	for(int flIndex = 0; flIndex < NUM_OF_FLOATS; flIndex++)
+	{
+		glBegin(GL_POLYGON);
+			glVertex3f(listOfFloats[flIndex].getXCoord(), listOfFloats[flIndex].getYCoord(), 0.0);
+			glVertex3f(listOfFloats[flIndex].getXCoord() - .01, listOfFloats[flIndex].getYCoord(), 0.0);
+			glVertex3f(listOfFloats[flIndex].getXCoord() - .01, listOfFloats[flIndex].getYCoord() - .01, 0.0);
+			glVertex3f(listOfFloats[flIndex].getXCoord(), listOfFloats[flIndex].getYCoord() - .01, 0.0);
+		glEnd();  
+	} /* for each floatie */
+	
 	glFlush();
 } /* display */
     
