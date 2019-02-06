@@ -19,6 +19,7 @@ class Pobj
 	public:
 		/* constructer */
 		Pobj(GLfloat x, GLfloat y);
+		Pobj(GLfloat x, GLfloat y, GLfloat dx, GLfloat dy);
 		Pobj();
 		
 		/* destructer */
@@ -35,6 +36,8 @@ class Pobj
 		void setXCoord(GLfloat x);
 		void setYCoord(GLfloat y);
 	
+		/* other prototypes */
+		void move(float timeElapse);
 };
 
 #endif

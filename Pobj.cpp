@@ -3,6 +3,19 @@
 using namespace std;
 
 /***************************************************/
+
+		
+Pobj::Pobj(GLfloat x, GLfloat y, GLfloat dx, GLfloat dy)
+{ 
+	xCoord = x;
+	yCoord = y;
+	mass = 1.0;
+	area = 4.0;
+	xVel = dx;
+	yVel = dy;
+} /* constructer */
+
+/***************************************************/
 		
 Pobj::Pobj(GLfloat x, GLfloat y)
 { 
@@ -40,6 +53,13 @@ void Pobj::setXCoord(GLfloat x) { xCoord = x; }
 void Pobj::setYCoord(GLfloat x) { yCoord = x; }
 
 /***************************************************/
+
+void Pobj::move(float timeElapse)
+{	
+	xCoord += xVel * timeElapse;
+	yCoord += yVel * timeElapse;
+} /* move */
+
 /***************************************************/
 /***************************************************/
 /***************************************************/

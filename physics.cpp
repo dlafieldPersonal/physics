@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <random>
+#include <ctime>
 #include "Pobj.h"
 
 #define NUM_OF_FLOATS 5
@@ -49,13 +50,13 @@ int main(int argc, char** argv)
 	uniform_real_distribution<> dist(-0.9, 0.9);
 	
 	for(int i = 0; i < NUM_OF_FLOATS; i++)
-		listOfFloats[i] = Pobj(dist(e2), dist(e2));
+		listOfFloats[i] = Pobj(dist(e2), dist(e2), dist(e2), dist(e2));
 
 	glutInit (&argc, argv);
 	glutInitDisplayMode (GLUT_RGB);
 	glutInitWindowSize (900, 500);
 	glutInitWindowPosition (000, 000);
-	glutCreateWindow ("Change colors by pressing c, s, and t.");
+	glutCreateWindow ("Moving around");
 	glutDisplayFunc (display);
 	glutKeyboardFunc (keyboard);
 	glutMainLoop();
@@ -95,18 +96,39 @@ void display()
 	glEnd();  
 	
 	/* draw floaties */
-	glColor3f(1.0, 1.0, 1.0);
-	for(int flIndex = 0; flIndex < NUM_OF_FLOATS; flIndex++)
+	for(int t = 0; t < 10; t++)
 	{
+		/*
+		glColor3f(0.0, 0.0, 0.0);
 		glBegin(GL_POLYGON);
-			glVertex3f(listOfFloats[flIndex].getXCoord(), listOfFloats[flIndex].getYCoord(), 0.0);
-			glVertex3f(listOfFloats[flIndex].getXCoord() - .01, listOfFloats[flIndex].getYCoord(), 0.0);
-			glVertex3f(listOfFloats[flIndex].getXCoord() - .01, listOfFloats[flIndex].getYCoord() - .01, 0.0);
-			glVertex3f(listOfFloats[flIndex].getXCoord(), listOfFloats[flIndex].getYCoord() - .01, 0.0);
+			glVertex3f(bTop + bThickness, bLeft + bThickness, 0.0);
+			glVertex3f(bTop + bThickness, bRight - bThickness, 0.0);
+			glVertex3f(bBottom - bThickness, bRight - bThickness, 0.0);
+			glVertex3f(bBottom - bThickness, bLeft + bThickness, 0.0);
 		glEnd();  
-	} /* for each floatie */
+		* */
+		glColor3f(1.0, 1.0, 1.0);
+		for(int flIndex = 0; flIndex < NUM_OF_FLOATS; flIndex++)
+		{
+			glBegin(GL_POLYGON);
+				glVertex3f(listOfFloats[flIndex].getXCoord(), listOfFloats[flIndex].getYCoord(), 0.0);
+				glVertex3f(listOfFloats[flIndex].getXCoord() - .01, listOfFloats[flIndex].getYCoord(), 0.0);
+				glVertex3f(listOfFloats[flIndex].getXCoord() - .01, listOfFloats[flIndex].getYCoord() - .01, 0.0);
+				glVertex3f(listOfFloats[flIndex].getXCoord(), listOfFloats[flIndex].getYCoord() - .01, 0.0);
+			glEnd();  
+			listOfFloats[flIndex].move(1.0);
+		} /* for each floatie */
+		
+		/* pause for time */
+		clock_t start_time = clock();
+		clock_t end_time = 1000 + start_time;
+		while(clock() != end_time);
+		cout << "time delayed " << t << endl;
+		
+	}
 	
 	glFlush();
+	
 } /* display */
     
 /***************************************************/
