@@ -3,9 +3,9 @@ import random
 import math
 crashed = False
 
-numOfParticalsStart = 2
-epsilon = 0.000001
-gravConst = 10.0
+numOfParticalsStart = 30
+epsilon = 2
+gravConst = 1000.0
 
 windowWidth = 1200
 windowHeight = 600
@@ -35,6 +35,8 @@ def plot(ds, color, x, y):
 	pg.draw.line(ds, color, [x, y], [x, y], 1)
 	
 def updateGravity(lstOfParticals):
+	
+	#print("start of update grav")
 	#(color, mass, x, y, dx, dy, accX, accY) = pp
 	for i in range(len(lstOfParticals)):
 		(iCol, iMass, iX, iY, iDx, iDy, iAccX, iAccY) = lstOfParticals[i]
@@ -44,6 +46,7 @@ def updateGravity(lstOfParticals):
 			if i != j:
 				(jCol, jMass, jX, jY, jDx, jDy, jAccX, jAccY) = lstOfParticals[j]
 				r2 = (iX - jX) ** 2 + (iY - jY)**2
+				"""
 				if r2 < epsilon:
 					print("Particle i = " + str(lstOfParticals[i]))
 					print("Particle j = " + str(lstOfParticals[j]))
@@ -65,40 +68,42 @@ def updateGravity(lstOfParticals):
 				print("diffX = " + str((iX - jX)))
 				print("diffY = " + str((iY - jY)))
 				print("r2 = " + str(r2))
-				
+				"""
 				gravAcc = iMass * jMass * gravConst / r2
-				print("gravAcc = " + str(gravAcc))
+				#print("gravAcc = " + str(gravAcc))
 				dist = r2 ** 0.5
-				print("dist = " + str(dist))
+				#print("dist = " + str(dist))
 				###
 				gravDone = False
 				#if same x, only do y
-				if abs(iX - jX) < epsilon:
-					gravDone = True
-					if jX > iX:
-						yGrav += gravAcc
-					else:
-						yGrav -= gravAcc
-					print("theta = Infinity")
-				if abs(iY - jY) < epsilon:
-					gravDone = True
-					if jY > iY:
-						xGrav += gravAcc
-					else:
-						xGrav -= gravAcc
-					print("theta = 0")
-				if not gravDone:
-					theta = math.atan((iY - jY) / (iX - jX))
-					print("theta = " + str(theta))
-					if jX > iX:
-						xGrav += gravAcc * math.cos(theta)
-					else:
-						xGrav -= gravAcc * math.cos(theta)
-					if jY > iY:
-						yGrav += gravAcc * math.sin(theta)
-					else:
-						yGrav -= gravAcc * math.sin(theta)
+				if dist < epsilon:
+					if abs(iX - jX) < epsilon:
+						gravDone = True
+						if jY > iY:
+							yGrav += gravAcc
+						else:
+							yGrav -= gravAcc
+						#print("theta = Infinity")
+					if abs(iY - jY) < epsilon:
+						gravDone = True
+						if jX > iX:
+							xGrav += gravAcc
+						else:
+							xGrav -= gravAcc
+						#print("theta = 0")
+					if not gravDone:
+						theta = math.atan((iY - jY) / (iX - jX))
+						#print("theta = " + str(theta))
+						if jX > iX:
+							xGrav += gravAcc * math.cos(theta)
+						else:
+							xGrav -= gravAcc * math.cos(theta)
+						if jY > iY:
+							yGrav += gravAcc * math.sin(theta)
+						else:
+							yGrav -= gravAcc * math.sin(theta)
 		lstOfParticals[i] = (iCol, iMass, iX, iY, iDx, iDy, xGrav, yGrav)
+	#print("end of update grav")
 	
 def initializeParticals(numOfParticals=1):
 	#create white particals in random place
@@ -106,11 +111,11 @@ def initializeParticals(numOfParticals=1):
 	
 	for i in range(numOfParticals):
 		#xLoc = random.randrange(windowWidth)
-		#xLoc = random.uniform(0.0, 0.0 + windowWidth)
-		xLoc = windowWidth / 2.0
+		xLoc = random.uniform(0.0, 0.0 + windowWidth)
+		#xLoc = windowWidth / 2.0
 		#yLoc = random.randrange(windowHeight)
 		yLoc = random.uniform(0.0, 0.0 + windowHeight)
-		#yLoc = 0.0
+		#yLoc = windowHeight / 2.0
 		"""
 		dx = 1
 		dy = -1
@@ -144,7 +149,7 @@ def initializeParticals(numOfParticals=1):
 		curColor = random.choice(listOfColors)
 		while curColor == black:
 			curColor = random.choice(listOfColors)
-		curColor = white
+		#curColor = white
 		#particals.append((curColor, initialMass, xLoc, yLoc, dx, dy, accX, accY))
 		particals.append((curColor, initialMass, xLoc, yLoc, dx, dy, 0.0, 0.0))
 		
@@ -196,6 +201,8 @@ def combine():
 
 def updateParticals():
 	
+	#print("Start of update particals")
+	
 	combine()	
 	for pIndex in range(len(particals)):
 		(curColor, mass, x, y, dx, dy, accX, accY) = particals[pIndex]
@@ -213,6 +220,7 @@ def updateParticals():
 		x += dx
 		y += dy
 		particals[pIndex] = (curColor, mass, x, y, dx, dy, accX, accY)
+	#print("end of update particals")
 		
 initializeParticals(numOfParticalsStart)
 
@@ -227,14 +235,16 @@ for p in particals:
 print("\n\n\n")
 breakTime = 3
 while not crashed and not finished and breakTime > 0:
-	breakTime -= 1
+	#breakTime -= 1
 	for event in pg.event.get():
 		if event.type == pg.QUIT:
 			crashed = True
 	updateParticals()
 	print(str(len(particals)) + " particals")
+	"""
 	for p in particals:
 		print(p)
+	"""
 	#pg.draw.rectangle(gameDisplay, 0, 0, windowHeight, windowWidth)
 	gameDisplay.fill(black)
 	finished = drawParticals(gameDisplay)
